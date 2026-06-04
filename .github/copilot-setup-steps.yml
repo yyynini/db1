@@ -1,8 +1,5 @@
 name: "Copilot Setup Steps"
 
-on:
-  workflow_dispatch:
-
 runs-on: self-hosted
 
 steps:
@@ -24,11 +21,11 @@ steps:
     shell: pwsh
     run: |
       az account show
-      Write-Host "✓ Azure CLI is authenticated"
+      Write-Host "Azure CLI is authenticated"
 
-  - name: Verify Kusto (Azure Data Explorer) access
+  - name: Verify Kusto access
     shell: pwsh
     run: |
       az extension add --name kusto --yes 2>$null
       az kusto cluster list --query "[].{name:name, state:state}" -o table
-      Write-Host "✓ Kusto access verified"
+      Write-Host "Kusto access verified"
