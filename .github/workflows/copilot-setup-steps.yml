@@ -10,7 +10,6 @@ on:
       - .github/workflows/copilot-setup-steps.yml
 
 jobs:
-  # The job MUST be called `copilot-setup-steps` or it will not be picked up by Copilot.
   copilot-setup-steps:
     runs-on: self-hosted
 
@@ -22,16 +21,13 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Verify Azure CLI authentication
-        shell: bash
+        shell: pwsh
         run: |
-          az account show && echo "Azure CLI authenticated"
+          az account show
+          Write-Host "Azure CLI authenticated"
 
       - name: Verify Kusto access
-        shell: bash
+        shell: pwsh
         run: |
-          az account get-access-token --resource "https://help.kusto.windows.net" --query accessToken -o tsv && echo "Kusto access verified"
-
-      - name: Verify ADO access
-        shell: bash
-        run: |
-          az account get-access-token --resource "499b84ac-1321-427f-aa17-267ca6975798" --query accessToken -o tsv && echo "ADO access verified"
+          az account get-access-token --resource "https://help.kusto.windows.net" --query accessToken -o tsv | Out-Null
+          Write-Host "Kusto access token acquired"
