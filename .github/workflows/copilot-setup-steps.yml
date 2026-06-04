@@ -20,6 +20,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
+      - name: Disable MCP startup on Windows runner
+        shell: pwsh
+        run: |
+          "COPILOT_MCP_ENABLED=false" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "GITHUB_COPILOT_REMOTE_MCP_ENABLED=false" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "GITHUB_COPILOT_3P_MCP_ENABLED=false" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "COPILOT_MCP_EMIT_PENDING_SETUP_LOGS=false" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
       - name: Verify Azure CLI authentication
         shell: pwsh
         run: |
