@@ -1,18 +1,17 @@
-name: "Copilot Setup Steps"
-
-on:
-  workflow_dispatch:
-
 runs-on: self-hosted
 
 steps:
   - name: Verify Azure CLI authentication
     run: |
       az account show
-      echo "✓ Azure CLI is authenticated"
+      echo "Azure CLI authenticated"
 
-  - name: Verify Kusto (Azure Data Explorer) access
+  - name: Verify Kusto access token
     run: |
-      az extension add --name kusto --yes 2>/dev/null || true
-      az kusto cluster list --query "[].{name:name, state:state}" -o table
-      echo "✓ Kusto access verified"
+      az account get-access-token --resource "https://help.kusto.windows.net" --query accessToken -o tsv > /dev/null
+      echo "Kusto access verified"
+
+  - name: Verify ADO access token
+    run: |
+      az account get-access-token --resource "499b84ac-1321-427f-aa17-267ca6975798" --query accessToken -o tsv > /dev/null
+      echo "ADO access verified"
