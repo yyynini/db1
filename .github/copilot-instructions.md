@@ -1,10 +1,18 @@
-# SONiC DualToR Nightly Triage Instructions
+# Copilot Instructions
 
-## Context
+## General
 
-You are assisting with triage of SONiC DualToR nightly test failures. DualToR (Dual Top-of-Rack) is a high-availability topology in SONiC where two ToR switches are connected to the same set of servers, providing redundancy and seamless failover.
+This repository supports various SONiC networking workflows. When assisting, use `az cli` and Kusto (Azure Data Explorer) for querying test data, logs, and telemetry. The self-hosted runner on this repo has access to Azure resources.
 
-## Triage Workflow
+---
+
+## SONiC DualToR Nightly Triage
+
+### Context
+
+DualToR (Dual Top-of-Rack) is a high-availability topology in SONiC where two ToR switches are connected to the same set of servers, providing redundancy and seamless failover. Below are instructions for triaging nightly test failures in this topology.
+
+### Triage Workflow
 
 1. **Identify failing tests**: Review the nightly test run results and identify tests that have failed. Focus on tests in the `dualtor` test module.
 
@@ -31,13 +39,13 @@ You are assisting with triage of SONiC DualToR nightly test failures. DualToR (D
    - For known issues: Link the failure to the existing work item and note the occurrence.
    - For new regressions: File a new bug with logs, attach the test run link, and identify the likely offending commit via `git log`.
 
-## Key Tools and Queries
+### Key Tools and Queries
 
 - Use `az cli` to query Kusto for historical test results and flakiness data.
 - Query pattern: `TestResults | where TestName contains "dualtor" | where Result == "Failed" | summarize count() by TestName | order by count_ desc`
 - Use the Azure Data Explorer (Kusto) database to correlate failures across multiple nightly runs.
 
-## Priorities
+### Priorities
 
 - **P0**: All tests in a topology failing (likely infra issue) — escalate immediately.
 - **P1**: New regression affecting core functionality (mux switchover, traffic forwarding).
